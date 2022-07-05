@@ -1,11 +1,21 @@
 /node_modules/
 /lib/
 /test/
+/utils/
 custom-elements.json
 # top level source
 my-element.js
 my-element.js.map
 my-element.d.ts
 my-element.d.ts.map
+calendar-wc.js
+calendar-wc.js.map
+calendar-wc.d.ts
+calendar-wc.d.ts.map
+calendar-wc.styles.js
+calendar-wc.styles.js.map
+calendar-wc.styles.d.ts
+calendar-wc.styles.d.ts.map
 # only generated for size check
 my-element.bundled.js
+calendar-wc.bundled.js

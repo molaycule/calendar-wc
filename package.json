@@ -1,11 +1,14 @@
 {
-  "name": "@lit/lit-starter-ts",
-  "private": true,
-  "version": "1.0.4",
-  "description": "A simple web component",
-  "main": "my-element.js",
-  "module": "my-element.js",
+  "name": "calendar-wc-alpha",
+  "version": "1.0.0",
+  "description": "A calendar web component",
+  "main": "calendar-wc.js",
+  "module": "calendar-wc.js",
   "type": "module",
+  "files": [
+    "/utils/*",
+    "calendar-wc*"
+  ],
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -38,7 +41,7 @@
     "typescript",
     "lit"
   ],
-  "author": "Google LLC",
+  "author": "Mohammed Agboola",
   "license": "BSD-3-Clause",
   "dependencies": {
     "lit": "^2.2.4"

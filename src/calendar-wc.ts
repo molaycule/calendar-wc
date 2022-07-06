@@ -1,5 +1,5 @@
 import {LitElement, html} from 'lit';
-import {customElement, state, queryAll} from 'lit/decorators.js';
+import {customElement, property, state, queryAll} from 'lit/decorators.js';
 import CalendarStyles from './calendar-wc.styles.js';
 import monthNames from './utils/monthNames.js';
 
@@ -11,6 +11,10 @@ export class Calendar extends LitElement {
 
   @queryAll('.header-month-year')
   private _headerMonthYearElement!: HTMLDivElement[];
+
+  @property({type: Boolean, attribute: 'hide-footer'}) hideFooter = false;
+
+  @property({type: Boolean, attribute: 'disabled'}) disabled = false;
 
   @state() private _date: Date = new Date();
 
@@ -25,27 +29,32 @@ export class Calendar extends LitElement {
   }
 
   override updated() {
+    this.attachOnSelectDateEventListener();
+    if (this._selectedDates.length === 2) {
+      this.renderSelectedDateRange();
+    }
+  }
+
+  attachOnSelectDateEventListener() {
+    if (this.disabled) return;
     this.renderRoot
       .querySelector('.today')
       ?.addEventListener('click', this.onSelectDate);
     this.renderRoot
       .querySelectorAll('.future-date')
       .forEach((el) => el.addEventListener('click', this.onSelectDate));
-    if (this._selectedDates.length === 2) {
-      this.renderSelectedDateRange();
-    }
   }
 
   renderSelectedDateRange() {
     let totalDateRange = 0;
-    const [day1, month1, year1] = this._selectedDates[0].split('/');
+    const [year1, month1, day1] = this._selectedDates[0].split('/');
     const startDate = new Date(+year1, Number(month1) - 1, +day1);
-    const [day2, month2, year2] = this._selectedDates[1].split('/');
+    const [year2, month2, day2] = this._selectedDates[1].split('/');
     const endDate = new Date(+year2, Number(month2) - 1, +day2);
 
     this.renderRoot.querySelectorAll('.days > div').forEach((el) => {
       if (el instanceof HTMLDivElement && el.dataset.date) {
-        const [day3, month3, year3] = el.dataset.date.split('/');
+        const [year3, month3, day3] = el.dataset.date.split('/');
         const date = new Date(+year3, Number(month3) - 1, +day3);
         if (date > startDate && date < endDate) {
           el.classList.add('selected-range');
@@ -53,7 +62,10 @@ export class Calendar extends LitElement {
         }
       }
     });
-    this._totalSelectedDates = this._selectedDates.length + totalDateRange;
+    this._totalSelectedDates =
+      this._totalSelectedDates > this._selectedDates.length
+        ? this._totalSelectedDates
+        : this._selectedDates.length + totalDateRange;
   }
 
   renderTwoColumnCalendar = () => {
@@ -122,9 +134,9 @@ export class Calendar extends LitElement {
 
   formatDate(day: number): string {
     const month = this._date.getMonth() + 1;
-    const date = `${day < MIN_DOUBLE_DIGIT ? `0${day}` : day}/${
+    const date = `${this._date.getFullYear()}/${
       month < MIN_DOUBLE_DIGIT ? `0${month}` : month
-    }/${this._date.getFullYear()}`;
+    }/${day < MIN_DOUBLE_DIGIT ? `0${day}` : day}`;
     return date;
   }
 
@@ -217,7 +229,7 @@ export class Calendar extends LitElement {
     const element = event.target as HTMLElement;
     const selectedDate = element.dataset.date;
     if (!selectedDate) return;
-    
+
     if (this._selectedDates.length === 2) {
       this.clearSelectedDates();
     }
@@ -302,6 +314,21 @@ export class Calendar extends LitElement {
     <div class="days"></div>
   </div>`;
 
+  calendarFooterTemplate = () => html`<div class="calendar-footer">
+    <button class="clear-dates-btn" @click=${this.clearSelectedDates}>
+      Clear Dates
+    </button>
+    <p class="selected-days-text">
+      Selected:
+      <strong>
+        ${this._totalSelectedDates > 1
+          ? `${this._totalSelectedDates} days`
+          : `${this._totalSelectedDates} day`}
+      </strong>
+    </p>
+    <button class="done-btn" @click=${this.doneSelectingDate}>Done</button>
+  </div>`;
+
   override render() {
     return html`<div class="calendar">
       <div class="calendar-header">
@@ -349,20 +376,7 @@ export class Calendar extends LitElement {
       <div class="month-container">
         ${this.calendarMonthTemplate()} ${this.calendarMonthTemplate()}
       </div>
-      <div class="calendar-footer">
-        <button class="clear-dates-btn" @click=${this.clearSelectedDates}>
-          Clear Dates
-        </button>
-        <p class="selected-days-text">
-          Selected:
-          <strong>
-            ${this._totalSelectedDates > 1
-              ? `${this._totalSelectedDates} days`
-              : `${this._totalSelectedDates} day`}
-          </strong>
-        </p>
-        <button class="done-btn" @click=${this.doneSelectingDate}>Done</button>
-      </div>
+      ${this.hideFooter ? null : this.calendarFooterTemplate()}
     </div>`;
   }
 }

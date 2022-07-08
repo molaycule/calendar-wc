@@ -1,4 +1,4 @@
-import { css } from 'lit';
+import {css} from 'lit';
 
 const CalendarStyles = css`
   :host {
@@ -13,9 +13,12 @@ const CalendarStyles = css`
   .calendar {
     width: 496px;
     height: auto;
+    border-radius: 8px;
+  }
+
+  .calendar.elevate {
     -webkit-box-shadow: 0 2px 16px rgb(0 0 0 / 15%);
     box-shadow: 0 2px 16px rgb(0 0 0 / 15%);
-    border-radius: 8px;
   }
 
   .calendar-header {
@@ -148,6 +151,7 @@ const CalendarStyles = css`
     cursor: not-allowed !important;
   }
 
+  .past-date.selected,
   .today.selected,
   .future-date.selected {
     background-color: #eda075;

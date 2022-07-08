@@ -1,5 +1,11 @@
 import {LitElement, html} from 'lit';
-import {customElement, property, state, queryAll} from 'lit/decorators.js';
+import {
+  customElement,
+  property,
+  state,
+  queryAll,
+  query,
+} from 'lit/decorators.js';
 import CalendarStyles from './calendar-wc.styles.js';
 import monthNames from './utils/monthNames.js';
 
@@ -7,6 +13,8 @@ const MIN_DOUBLE_DIGIT = 10;
 
 @customElement('calendar-wc')
 export class Calendar extends LitElement {
+  @query('.calendar') private _baseElement!: HTMLDivElement;
+
   @queryAll('.days') private _daysElement!: HTMLDivElement[];
 
   @queryAll('.header-month-year')
@@ -14,7 +22,12 @@ export class Calendar extends LitElement {
 
   @property({type: Boolean, attribute: 'hide-footer'}) hideFooter = false;
 
+  @property({type: Boolean, attribute: 'elevate'}) elevate = false;
+
   @property({type: Boolean, attribute: 'disabled'}) disabled = false;
+
+  @property({type: Array, attribute: 'highlight-dates'})
+  highlightDates: string[] = [];
 
   @state() private _date: Date = new Date();
 
@@ -26,10 +39,12 @@ export class Calendar extends LitElement {
 
   override firstUpdated() {
     this.renderTwoColumnCalendar();
+    if (this.elevate) this._baseElement.classList.add('elevate');
   }
 
   override updated() {
     this.attachOnSelectDateEventListener();
+    this.renderHighlightedDates();
     if (this._selectedDates.length === 2) {
       this.renderSelectedDateRange();
     }
@@ -118,18 +133,20 @@ export class Calendar extends LitElement {
     const lastDay = this.getLastDayOfMonthBasedOnCalendarColumn(columnIndex);
     for (let day = 1; day <= lastDay; day += 1) {
       if (this.isToday(day)) {
-        days += `<div class="today" data-date=${this.formatDate(
-          day
-        )}>${day}</div>`;
+        days += this.dayElement('today', day);
       } else if (this.isPastDate(day, lastDay)) {
-        days += `<div class="past-date">${day}</div>`;
+        days += this.dayElement('past-date', day);
       } else {
-        days += `<div class="future-date" data-date=${this.formatDate(
-          day
-        )}>${day}</div>`;
+        days += this.dayElement('future-date', day);
       }
     }
     return days;
+  }
+
+  dayElement(className: string, day: number): string {
+    return `<div class=${className} data-date=${this.formatDate(
+      day
+    )}>${day}</div>`;
   }
 
   formatDate(day: number): string {
@@ -219,6 +236,19 @@ export class Calendar extends LitElement {
         el instanceof HTMLDivElement &&
         el.dataset.date &&
         this._selectedDates.includes(el.dataset.date)
+      ) {
+        el.classList.add('selected');
+      }
+    });
+  }
+
+  renderHighlightedDates() {
+    console.log('pp', this.highlightDates);
+    this.renderRoot.querySelectorAll('.days > div').forEach((el) => {
+      if (
+        el instanceof HTMLDivElement &&
+        el.dataset.date &&
+        this.highlightDates.includes(el.dataset.date)
       ) {
         el.classList.add('selected');
       }

@@ -243,7 +243,6 @@ export class Calendar extends LitElement {
   }
 
   renderHighlightedDates() {
-    console.log('pp', this.highlightDates);
     this.renderRoot.querySelectorAll('.days > div').forEach((el) => {
       if (
         el instanceof HTMLDivElement &&

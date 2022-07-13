@@ -145,7 +145,8 @@ const CalendarStyles = css`
     cursor: default !important;
   }
 
-  .past-date {
+  .past-date,
+  .blur-date {
     color: #909090;
     opacity: 0.4;
     cursor: not-allowed !important;

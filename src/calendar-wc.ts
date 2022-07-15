@@ -26,11 +26,11 @@ export class Calendar extends LitElement {
 
   @property({type: Boolean, attribute: 'disabled'}) disabled = false;
 
-  @property({type: Array, attribute: 'highlight-dates'})
-  highlightDates: string[] = [];
+  @property({type: String, attribute: 'highlight-dates'})
+  highlightDates = '';
 
-  @property({type: Array, attribute: 'blur-dates'})
-  blurDates: string[] = [];
+  @property({type: String, attribute: 'blur-dates'})
+  blurDates = '';
 
   @state() private _date: Date = new Date();
 
@@ -47,8 +47,8 @@ export class Calendar extends LitElement {
 
   override updated() {
     this.attachOnSelectDateEventListener();
-    if (this.highlightDates.length > 0) this.renderHighlightedDates();
-    if (this.blurDates.length > 0) this.renderBlurredDates();
+    if (this.highlightDates) this.renderHighlightedDates();
+    if (this.blurDates) this.renderBlurredDates();
     if (this._selectedDates.length === 2) {
       this.renderSelectedDateRange();
     }
@@ -251,7 +251,10 @@ export class Calendar extends LitElement {
       if (
         el instanceof HTMLDivElement &&
         el.dataset.date &&
-        this.highlightDates.includes(el.dataset.date)
+        this.highlightDates
+          .replaceAll(' ', '')
+          .split(',')
+          .includes(el.dataset.date)
       ) {
         el.classList.add('selected');
       }
@@ -263,7 +266,7 @@ export class Calendar extends LitElement {
       if (
         el instanceof HTMLDivElement &&
         el.dataset.date &&
-        this.blurDates.includes(el.dataset.date)
+        this.blurDates.replaceAll(' ', '').split(',').includes(el.dataset.date)
       ) {
         el.classList.add('blur-date');
       }

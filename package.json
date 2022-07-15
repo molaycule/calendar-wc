@@ -1,6 +1,6 @@
 {
   "name": "calendar-wc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A calendar web component",
   "main": "calendar-wc.js",
   "module": "calendar-wc.js",
@@ -35,6 +35,14 @@
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molaycule/calendar-wc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/molaycule/calendar-wc/issues"
+  },
+  "homepage": "https://github.com/molaycule/calendar-wc#readme",
   "keywords": [
     "web-components",
     "lit-element",

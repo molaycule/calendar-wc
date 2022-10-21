@@ -94,7 +94,7 @@ export class Calendar extends LitElement {
       this.setDateMonthAndYearBasedOnCalendarColumn(columnIndex);
       this.renderMonthNameInCalendarColumnHeader(columnIndex);
       daysBuilder += this.previousMonthDaysInCurrentMonthBuilder();
-      daysBuilder += this.calendarDaysBuilder(columnIndex);
+      daysBuilder += this.calendarDaysBuilder();
       this.renderDaysBasedOnCalendarColumn(daysBuilder, columnIndex);
     }
   };
@@ -132,9 +132,9 @@ export class Calendar extends LitElement {
     return days;
   }
 
-  calendarDaysBuilder(columnIndex: number): string {
+  calendarDaysBuilder(): string {
     let days = '';
-    const lastDay = this.getLastDayOfMonthBasedOnCalendarColumn(columnIndex);
+    const lastDay = this.getLastDayOfDateMonth();
     for (let day = 1; day <= lastDay; day += 1) {
       if (this.isToday(day)) {
         days += this.dayElement('today', day);
@@ -161,10 +161,10 @@ export class Calendar extends LitElement {
     return date;
   }
 
-  getLastDayOfMonthBasedOnCalendarColumn(columnIndex: number) {
+  getLastDayOfDateMonth() {
     return new Date(
       this._date.getFullYear(),
-      this._date.getMonth() + 1 + columnIndex,
+      this._date.getMonth() + 1,
       0
     ).getDate();
   }

@@ -1,6 +1,6 @@
 {
   "name": "calendar-wc",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A calendar web component",
   "main": "calendar-wc.js",
   "module": "calendar-wc.js",

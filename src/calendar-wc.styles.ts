@@ -134,7 +134,7 @@ const CalendarStyles = css`
     font-size: 0.75rem;
     width: 14.2857%;
     height: 26.4px;
-      display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;

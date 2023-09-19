@@ -11,7 +11,7 @@ const CalendarStyles = css`
   }
 
   .calendar {
-    width: 496px;
+    width: 100%;
     height: auto;
     border-radius: 8px;
   }
@@ -59,7 +59,7 @@ const CalendarStyles = css`
   }
 
   .month {
-    width: 240px;
+    width: 100%;
     height: auto;
   }
 
@@ -79,7 +79,7 @@ const CalendarStyles = css`
     justify-content: center;
     align-items: center;
     color: #bebebe;
-    width: 28px;
+    width: 14.2857%;
   }
 
   .clear-dates-btn,
@@ -132,8 +132,7 @@ const CalendarStyles = css`
 
   .days div {
     font-size: 0.75rem;
-    margin: 4.8px;
-    width: 23.2px;
+    width: 14.2857%;
     height: 26.4px;
     display: flex;
     justify-content: center;
